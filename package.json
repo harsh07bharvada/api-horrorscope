@@ -1,0 +1,27 @@
+{
+  "name": "api-horrorscope",
+  "version": "1.0.0",
+  "description": "API for Horrorscope",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harsh07bharvada/api-horrorscope.git"
+  },
+  "author": "Harsh Bharvada",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harsh07bharvada/api-horrorscope/issues"
+  },
+  "homepage": "https://github.com/harsh07bharvada/api-horrorscope#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^14.5.8",
+    "mongodb": "^3.3.5",
+    "mongoose": "^5.7.12"
+  }
+}
