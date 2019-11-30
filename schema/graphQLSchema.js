@@ -1,19 +1,9 @@
 const Zodiac = require("./schema.js");
-
- 
-
 const graphql = require('graphql');
 
- 
-
-const {
-
-    GraphQLObjectType, GraphQLString,
-
-    GraphQLID, GraphQLSchema,
-
-    GraphQLList,GraphQLNonNull, GraphQLInputObjectType
-
+//GRAPHQL OBJECTS
+ const {
+            GraphQLObjectType, GraphQLString, GraphQLID, GraphQLSchema, GraphQLList,GraphQLNonNull, GraphQLInputObjectType
 } = graphql;
 
  
@@ -30,139 +20,89 @@ var fakeZodiacDatabase = [
 
  
 
- // TRAIT TYPES
-
+ // TRAIT FOR GOOD_TRAIT AND BAD_TRAIT
 const TraitType = new GraphQLObjectType({
 
     name : 'Trait',
-
     fields :{
-
-        trait :
-
-        { 
-
-            type : GraphQLString
-
-      }
-
+        trait : {  type : GraphQLString }
     }
 
 });
 
+//TRAIT INPUT TYPE FOR MUTATION
 const TraitInputType = new GraphQLInputObjectType({
 
     name : 'TraitInput',
     fields :{
-
-        trait :{ 
-            type : GraphQLString
-        }
+        trait :{  type : GraphQLString }
     }
 
 });
 
 
-
- 
-//FAMOUS TYPES
+//FAMOUS PEOPLE
 const FamousType = new GraphQLObjectType({
 
     name : 'Famous',
-
     fields : {
-
         name : { type : GraphQLString }
-
     }
 
 });
 
+//FAMOUS PEOPLE INPUT TYPE FOR MUTATION
 const FamousInputType = new GraphQLInputObjectType({
 
     name : 'FamousInput',
-
     fields : {
-
         name : { type : GraphQLString }
-
     }
 
 });
 
  
 //ZODIAC TYPES
-
 const ZodiacType = new GraphQLObjectType({
-
     name : 'Zodiac',
-
     fields : {
-
-       sign_name : { type : GraphQLString },
-
+        sign_name : { type : GraphQLString },
         date_range : { type : GraphQLString},
-
-        good_traits : { type : new GraphQLList(TraitType)
-        },
-
-        bad_traits : { type : new GraphQLList(TraitType)
-         },
-
-        famous_people : { type : new GraphQLList(FamousType)}
-
+        good_traits : { type : new GraphQLList(TraitType) },
+        bad_traits : { type : new GraphQLList(TraitType) },
+        famous_people : { type : new GraphQLList(FamousType) }
     }
-
 });
 
+//ZODIAC INPUT TYPE FOR MUTATION
 const ZodiacInputType = new GraphQLInputObjectType({
-
     name : 'ZodiacInput',
-
     fields : {
-
         sign_name : { type : GraphQLString },
-
         date_range : { type : GraphQLString},
-
         good_traits : { type : new GraphQLList(TraitInputType)},
-
         bad_traits : { type : new GraphQLList(TraitInputType)},
-
         famous_people : { type : new GraphQLList(FamousInputType)}
-
     }
-
 });
 
  
-
+//GRAPHQL ROOT QUERY
 const RootQuery = new GraphQLObjectType({
 
     name : 'RootQueryType',
-
     fields:{
-
         zodiac : {
-
             type : ZodiacType,
-
             args :{ sign_name : { type : GraphQLString}},
-
             resolve(parent,args) {
-
-                // return Zodiac.find((item)=>{ return item.sign_name == args.sign_name});
-
                 return fakeZodiacDatabase.find(element => {return element.sign_name == args.sign_name});
-
             }
-
         }
-
     }
-
 });
 
+//MUTATION QUERY FOR INSERTING DATA
 const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields:{
@@ -188,7 +128,7 @@ const Mutation = new GraphQLObjectType({
     } 
 })
  
-
+//EXPORTING GRAPHQL SCHEMA
 module.exports = new GraphQLSchema({
 
     query: RootQuery,
