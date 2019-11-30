@@ -1,0 +1,7 @@
+{
+    "env": {
+        "MONGO_USER": "harsh07bharvada",
+        "MONGO_PASSWORD": "gelato%4007",
+        "MONGO_DB": "horrorscope"
+    }
+}

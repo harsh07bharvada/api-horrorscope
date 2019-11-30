@@ -10,9 +10,9 @@ const {
 
     GraphQLObjectType, GraphQLString,
 
-    GraphQLID, GraphQLInt,GraphQLSchema,
+    GraphQLID, GraphQLSchema,
 
-    GraphQLList,GraphQLNonNull
+    GraphQLList,GraphQLNonNull, GraphQLInputObjectType
 
 } = graphql;
 
@@ -30,7 +30,7 @@ var fakeZodiacDatabase = [
 
  
 
- 
+ // TRAIT TYPES
 
 const TraitType = new GraphQLObjectType({
 
@@ -50,8 +50,22 @@ const TraitType = new GraphQLObjectType({
 
 });
 
- 
+const TraitInputType = new GraphQLInputObjectType({
 
+    name : 'TraitInput',
+    fields :{
+
+        trait :{ 
+            type : GraphQLString
+        }
+    }
+
+});
+
+
+
+ 
+//FAMOUS TYPES
 const FamousType = new GraphQLObjectType({
 
     name : 'Famous',
@@ -62,9 +76,22 @@ const FamousType = new GraphQLObjectType({
 
     }
 
-})
+});
+
+const FamousInputType = new GraphQLInputObjectType({
+
+    name : 'FamousInput',
+
+    fields : {
+
+        name : { type : GraphQLString }
+
+    }
+
+});
 
  
+//ZODIAC TYPES
 
 const ZodiacType = new GraphQLObjectType({
 
@@ -72,33 +99,37 @@ const ZodiacType = new GraphQLObjectType({
 
     fields : {
 
-        id : {type : GraphQLID},
+       sign_name : { type : GraphQLString },
+
+        date_range : { type : GraphQLString},
+
+        good_traits : { type : new GraphQLList(TraitType)
+        },
+
+        bad_traits : { type : new GraphQLList(TraitType)
+         },
+
+        famous_people : { type : new GraphQLList(FamousType)}
+
+    }
+
+});
+
+const ZodiacInputType = new GraphQLInputObjectType({
+
+    name : 'ZodiacInput',
+
+    fields : {
 
         sign_name : { type : GraphQLString },
 
         date_range : { type : GraphQLString},
 
-        good_traits : { type : new GraphQLList(TraitType),
+        good_traits : { type : new GraphQLList(TraitInputType)},
 
-            resolve(parent,args)
+        bad_traits : { type : new GraphQLList(TraitInputType)},
 
-            {
-
-               return fakeZodiacDatabase.find(element => {return element.sign_name == parent.sign_name}).good_traits;
-
-            }},
-
-        bad_traits : { type : new GraphQLList(TraitType),
-
-            resolve(parent,args)
-
-            {
-
-               return fakeZodiacDatabase.find(element => {return element.sign_name == parent.sign_name}).bad_traits;
-
-            } },
-
-        famous_people : { type : new GraphQLList(FamousType)}
+        famous_people : { type : new GraphQLList(FamousInputType)}
 
     }
 
@@ -132,10 +163,35 @@ const RootQuery = new GraphQLObjectType({
 
 });
 
+const Mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    fields:{
+        addZodiac:{
+            type:ZodiacType,
+            args :
+            { 
+                input: { type: ZodiacInputType }
+            },
+            resolve(parent,args){
+                
+                let zodiacNewObject = new Zodiac({
+                    sign_name : args.input.sign_name,
+                    date_range: args.input.date_range,
+                    good_traits : args.input.good_traits,
+                    bad_traits : args.input.bad_traits,
+                    famous_people : args.input.famous_people
+                });
+                
+                return zodiacNewObject.save();
+            }
+        }
+    } 
+})
  
 
 module.exports = new GraphQLSchema({
 
-    query: RootQuery
+    query: RootQuery,
+    mutation : Mutation
 
 });
