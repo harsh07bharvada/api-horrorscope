@@ -2,9 +2,12 @@ const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const schema = require('./schema/graphQLSchema');
 const mongoose = require('mongoose');
+const path = require('path');
+const port = process.env.PORT || 3000;
+
 
 //CONSTANTS
-const url = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@crudmongodb-t7ak7.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
+const url = `mongodb+srv://harsh07bharvada:gelato%4007@crudmongodb-t7ak7.mongodb.net/horrorscope?retryWrites=true&w=majority`;
 
 //EXPRESS INSTANCE
 const app = express();
@@ -23,6 +26,9 @@ mongoose
     process.exit();
 });
 
+app.get('/',(req,res)=> {
+    res.sendFile(path.join(__dirname+'/index.html'));
+  });
 
 //GRAPHQL ENDPOINT
 app.use('/graphql', graphqlHTTP({
@@ -34,7 +40,7 @@ app.use('/graphql', graphqlHTTP({
 
  
 //EXPRESS APP CONNECTED
-app.listen(3000, () => {
+app.listen(port, () => {
 
     console.log('Listening on port 3000');
 
