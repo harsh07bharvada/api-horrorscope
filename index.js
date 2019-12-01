@@ -3,6 +3,7 @@ const graphqlHTTP = require('express-graphql');
 const schema = require('./schema/graphQLSchema');
 const mongoose = require('mongoose');
 const path = require('path');
+var cors = require('cors');
 const port = process.env.PORT || 3000;
 
 
@@ -12,10 +13,7 @@ const url = `mongodb+srv://harsh07bharvada:gelato%4007@crudmongodb-t7ak7.mongodb
 //EXPRESS INSTANCE
 const app = express();
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-  });
+app.use(cors());
 
 //MONGOOSE CONNECTION 
 mongoose
