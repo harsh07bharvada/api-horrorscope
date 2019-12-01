@@ -12,6 +12,11 @@ const url = `mongodb+srv://harsh07bharvada:gelato%4007@crudmongodb-t7ak7.mongodb
 //EXPRESS INSTANCE
 const app = express();
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+  });
+
 //MONGOOSE CONNECTION 
 mongoose
 .connect(url, {
