@@ -96,7 +96,12 @@ const RootQuery = new GraphQLObjectType({
             type : ZodiacType,
             args :{ sign_name : { type : GraphQLString}},
             resolve(parent,args) {
-                return fakeZodiacDatabase.find(element => {return element.sign_name == args.sign_name});
+                return Zodiac.find({sign_name : args.sign_name}).then(eachZ => {
+                    console.log(eachZ[0]);
+                    return eachZ[0];
+                }).catch(err => {
+                    throw err
+                });
             }
         }
     }
